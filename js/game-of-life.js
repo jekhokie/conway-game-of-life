@@ -9,6 +9,7 @@ const FRAME_RATE_PER_MINUTE = 360;
 // useful constants/colors
 const BLACK_HEX = 0x000000;
 const BLUE_HEX = 0x0000FF;
+const RED_HEX = 0xFF0000;
 const GRAY_HEX = 0xDDDDDD;
 const GRAY = '#DDDDDD';
 
@@ -107,14 +108,14 @@ function updateCells() {
 
             // count the neighbors of the current cell, starting
             // in upper left and moving clockwise
-            cellGrid[i-1] && cellGrid[i-1][j-1] && count++;  // up, left
-            cellGrid[i]   && cellGrid[i][j-1]   && count++;  // up
-            cellGrid[i+1] && cellGrid[i+1][j-1] && count++;  // up, right
-            cellGrid[i+1] && cellGrid[i+1][j]   && count++;  // right
-            cellGrid[i+1] && cellGrid[i+1][j+1] && count++;  // down, right
-            cellGrid[i]   && cellGrid[i][j+1]   && count++;  // down
-            cellGrid[i-1] && cellGrid[i-1][j+1] && count++;  // down, left
-            cellGrid[i-1] && cellGrid[i-1][j]   && count++;  // left
+            cellGrid[i-1] && (cellGrid[i-1][j-1] == 1) && count++;  // up, left
+            cellGrid[i]   && (cellGrid[i][j-1]   == 1) && count++;  // up
+            cellGrid[i+1] && (cellGrid[i+1][j-1] == 1) && count++;  // up, right
+            cellGrid[i+1] && (cellGrid[i+1][j]   == 1) && count++;  // right
+            cellGrid[i+1] && (cellGrid[i+1][j+1] == 1) && count++;  // down, right
+            cellGrid[i]   && (cellGrid[i][j+1]   == 1) && count++;  // down
+            cellGrid[i-1] && (cellGrid[i-1][j+1] == 1) && count++;  // down, left
+            cellGrid[i-1] && (cellGrid[i-1][j]   == 1) && count++;  // left
 
             // determine what to do with the new cell position
             // conditions are:
@@ -122,12 +123,20 @@ function updateCells() {
             //  2. Any live cell with 2-3 live neighbors lives.
             //  3. Any live cell with > 3 neighbors dies.
             //  4. Any dead cell with exactly 3 neighbors becomes live.
-            if (cellGrid[i][j]) {
+            if (cellGrid[i][j] == 1) {
                 if (count == 2 || count == 3) {
+                    // cell lives on
                     newGrid[i][j] = 1;
+                } else {
+                    // dead cell representation 1
+                    newGrid[i][j] = -1;
                 }
             } else if (count == 3) {
+                // new cell populated
                 newGrid[i][j] = 1;
+            } else if (cellGrid[i][j] == -1) {
+                // dead cell representation 2
+                newGrid[i][j] = -2;
             }
 
             count = 0;
@@ -155,12 +164,29 @@ function genLifeGrid() {
     // draw the grid on the screen, along with the live cells
     for (var i = 0; i < cellGrid.length; i++) {
         for (var j = 0; j < cellGrid[i].length; j++) {
-            cellGrid[i][j] ? graphics.beginFill(BLUE_HEX, 1) : graphics.beginFill(GRAY_HEX, 1);
+            // handle color and transparency
+            switch(cellGrid[i][j]) {
+                // mostly dead cell
+                case -2:
+                    graphics.beginFill(RED_HEX, 0.2)
+                    break;
+                // dying cell
+                case -1:
+                    graphics.beginFill(RED_HEX, 0.5)
+                    break;
+                // live cell
+                case 1:
+                    graphics.beginFill(BLUE_HEX, 1)
+                    break;
+                // default is blank/empty (filled with grid color)
+                default:
+                    graphics.beginFill(GRAY_HEX, 1);
+            }
             graphics.drawRect(i * CELL_WIDTH,
                               j * CELL_HEIGHT,
                               CELL_WIDTH,
                               CELL_HEIGHT);
-            cellGrid[i][j] && graphics.endFill();
+            (cellGrid[i][j] == 1 || cellGrid[i][j] == -1 || cellGrid[i][j] == -2) && graphics.endFill();
         }
     }
 }
