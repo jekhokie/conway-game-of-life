@@ -186,7 +186,7 @@ function genLifeGrid() {
                               j * CELL_HEIGHT,
                               CELL_WIDTH,
                               CELL_HEIGHT);
-            (cellGrid[i][j] == 1 || cellGrid[i][j] == -1 || cellGrid[i][j] == -2) && graphics.endFill();
+            graphics.endFill();
         }
     }
 }
