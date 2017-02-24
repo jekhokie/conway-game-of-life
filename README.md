@@ -14,15 +14,12 @@ in the link under the main heading, but are in general as follows:
 3. Any live cell with more than 3 neighbors dies, as if by overpopulation.
 4. Any dead cell with exactly 3 neighbors becomes a live cell, as if by reproduction.
 
+There are several implementations of the Game of Life, including the traditional 2-D square graph
+and a more enhanced/complicated circle-graph implementation.
+
 ## How to Use
 
 In order to launch the visualization, simply download/clone the repository to a location on your
 local computer and then open the "index.html" file in a modern browser of your choice (Google
-Chrome works well for this). You will then see Conway's Game of Life display and animate.
-
-## Enhancements
-
-This Game of Life has been updated/enhanced to represent dead cells in two follow-up colors - when
-a cell is first killed, it will be represented in a darker red color. The following step will show
-the dying cell in a lighter red color, at which point it will disappear in the next transition if
-not resurrected by neighbors.
+Chrome works well for this). From the options listed, select one of the Game of Life animations
+you wish to view, and the Game of Life should then animate automatically on your screen.
